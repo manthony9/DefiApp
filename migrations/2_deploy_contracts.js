@@ -1,5 +1,5 @@
 const DappToken = artifacts.require("DappToken");
-const DaiToken = artifcats.require("DaiToken");
+const DaiToken = artifacts.require("DaiToken");
 const TokenFarm = artifacts.require("TokenFarm");
 
 module.exports = async function(deployer, network, accounts) {
@@ -19,5 +19,5 @@ module.exports = async function(deployer, network, accounts) {
   await dappToken.transfer(tokenFarm.address, "1000000000000000000000000");
 
   //transfer 100 Mock DAI tokens to an investor
-  await daiToken.transfer(accounts[1], "1000000000000000000000000");
+  await daiToken.transfer(accounts[1], "100000000000000000000");
 };
