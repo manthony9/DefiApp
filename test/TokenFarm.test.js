@@ -1,5 +1,7 @@
 /* eslint-disable */
 
+const { assert } = require("chai");
+
 const DappToken = artifacts.require("DappToken");
 const DaiToken = artifacts.require("DaiToken");
 const TokenFarm = artifacts.require("TokenFarm");
@@ -103,6 +105,52 @@ contract("TokenFarm", ([owner, investor]) => {
         "true",
         "Correct Staking status for Investor after staking"
       );
+
+      //issue tokens
+      await tokenFarm.issueToken({ from: owner });
+
+      //check balance after issuing tokens
+      result = await dappToken.balanceOf(investor);
+      assert.equal(
+        result.toString(),
+        tokens("100"),
+        "investor DApp token balance after issuing tokens correct"
+      );
+
+      await tokenFarm.issueToken({ from: investor }).should.be.rejected;
+
+      //unstake tokens
+      await tokenFarm.unstakeToken({ from: investor });
+
+      result = await daiToken.balanceOf(investor);
+      assert.equal(
+        result.toString(),
+        tokens("100"),
+        "investor Mock DAI wallet balance correct after staking"
+      );
+
+      result = await daiToken.balanceOf(tokenFarm.address);
+      assert.equal(
+        result.toString(),
+        tokens("0"),
+        "Token Farm Mock DAI balance correct after staking"
+      );
+
+      result = await tokenFarm.stakingBalance(investor);
+      assert.equal(
+        result.toString(),
+        tokens("0"),
+        "Investor staking balance correct after staking"
+      );
+
+      result = await tokenFarm.isStaking(investor);
+      assert.equal(
+        result.toString(),
+        "false",
+        "investor staking status correct after staking"
+      );
     });
   });
+
+  
 });
