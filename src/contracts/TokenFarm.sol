@@ -86,7 +86,6 @@ contract TokenFarm {
                 dappToken.transfer(recipient, balance);
             }
 
-
         }
     }
 
